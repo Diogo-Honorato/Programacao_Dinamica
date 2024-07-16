@@ -4,18 +4,14 @@
 #define TAMANHO_MAXIMO 100005
 
 // Função que retorna o máximo entre dois inteiros
-// Função que retorna o máximo entre dois inteiros
 int obterMaiorValor(int primeiroValor, int segundoValor)
 {
-
     if (primeiroValor > segundoValor)
     {
-
         return primeiroValor;
     }
     else
     {
-
         return segundoValor;
     }
 }
@@ -37,25 +33,60 @@ long long calcularPontuacaoMaximaDinamica(int *frequencia, int tamanhoMaximo)
     return tabelaDePontuacoes[tamanhoMaximo - 1];
 }
 
-// Função para calcular a pontuação máxima usando abordagem gulosa
-long long calcularPontuacaoMaximaGulosa(int quantidadeDeElementos, int *sequencia)
+// Função para calcular a pontuação máxima usando busca exaustiva
+long long calcularPontuacaoMaximaExaustiva(int *sequencia, int tamanho)
 {
-    if (quantidadeDeElementos == 0)
+    if (tamanho == 0)
     {
         return 0;
     }
 
-    long long pontosAtuais = 0;
-    long long pontosAnteriores = 0;
+    // Variável para armazenar a pontuação máxima encontrada
+    long long maximoPontuacao = 0;
 
-    for (int i = 0; i < quantidadeDeElementos; i++)
+    // Percorrer todas as possíveis escolhas de elementos para remoção
+    for (int i = 0; i < tamanho; i++)
     {
-        long long pontosTemp = pontosAtuais;
-        pontosAtuais = obterMaiorValor(pontosAtuais, pontosAnteriores + (long long)sequencia[i] * i);
-        pontosAnteriores = pontosTemp;
+        // Calculando a pontuação para a jogada atual
+        long long pontosJogadaAtual = (long long)sequencia[i] * i;
+
+        // Calculando o tamanho da nova sequência
+        int tamanhoNovaSequencia = tamanho - 3;
+        if (tamanhoNovaSequencia <= 0)
+        {
+            continue; // Ignora esta iteração se não houver elementos suficientes para formar uma nova sequência
+        }
+
+        // Criando uma nova sequência sem o elemento atual e seus vizinhos
+        int *novaSequencia = (int *)malloc(tamanhoNovaSequencia * sizeof(int));
+        if (novaSequencia == NULL)
+        {
+            printf("\n\033[0;31mErro ao alocar memória para nova sequência.\033[0m\n\n");
+            exit(1);
+        }
+
+        int indiceNovaSequencia = 0;
+
+        for (int j = 0; j < tamanho; j++)
+        {
+            if (j == i || j == i + 1 || j == i - 1)
+            {
+                continue;
+            }
+            novaSequencia[indiceNovaSequencia++] = sequencia[j];
+        }
+
+        // Chamada recursiva para calcular a pontuação máxima para a nova sequência
+        long long pontuacaoRestante = calcularPontuacaoMaximaExaustiva(novaSequencia, tamanhoNovaSequencia);
+
+        // Atualizar a pontuação máxima encontrada até agora
+        maximoPontuacao = obterMaiorValor(maximoPontuacao, pontosJogadaAtual + pontuacaoRestante);
+
+        // Liberar memória alocada dinamicamente
+        free(novaSequencia);
     }
 
-    return pontosAtuais;
+    return maximoPontuacao;
 }
 
 // Função para ler um inteiro da entrada
@@ -120,7 +151,7 @@ int escreverArquivo(const char *caminhoArquivoSaida, long long resultado)
     fprintf(fileOut, "%lld\n", resultado);
     fclose(fileOut);
 
-    printf("\n\033[0;32mArquivo de saida gerado com sucesso!\033[0m\n\n");
+    printf("\n\033[0;32mArquivo de saída gerado com sucesso!\033[0m\n\n");
 
     return 1;
 }
@@ -148,7 +179,7 @@ int main(int argc, char *argv[])
 
     if (argv[1][0] == 'A')
     {
-        pontuacaoMaxima = calcularPontuacaoMaximaGulosa(quantidadeDeElementos, sequencia);
+        pontuacaoMaxima = calcularPontuacaoMaximaExaustiva(sequencia, quantidadeDeElementos);
     }
     else if (argv[1][0] == 'D')
     {
@@ -157,7 +188,7 @@ int main(int argc, char *argv[])
     else
     {
         printf("\n\033[0;31mERRO: Estratégia desconhecida.\033[0m\n");
-        printf("\033[0;31mUsar: <D> para programaçao dinamica ou <A> para estrategia alternetiva\033[0m\n\n");
+        printf("\033[0;31mUsar: <D> para programação dinâmica ou <A> para estratégia alternativa\033[0m\n\n");
         return 1;
     }
 
