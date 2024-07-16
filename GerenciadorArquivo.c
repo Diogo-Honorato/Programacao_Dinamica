@@ -59,35 +59,3 @@ int escreverArquivo(const char* CAMINHO_ARQUIVO_SAIDA, int resultado){
     return 1;
 
 }
-
-
-
-
-
-int main(int argc, char *argv[]){
-
-    if (argc != 3) {
-        printf("\nERRO: %s <estrategia> entrada.txt, multiplos comandos no terminal.\n", argv[0]);
-        return 1;
-    }
-
-    int *array;
-
-    char* arquivoEntrada = argv[2];
-
-    char *arquivoSaida = "saida.txt";
-
-    int num = 15;
-
-    array = lerArquivo(arquivoEntrada);
-
-
-
-    for(int i = 0; i < 12; i++){
-
-        printf("%d ", array[i]);
-    }
-
-
-    escreverArquivo(arquivoSaida,num);
-}

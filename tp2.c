@@ -4,7 +4,7 @@
 #define TAMANHO_MAXIMO 100000
 
 // Função que retorna o máximo entre dois inteiros
-int obterMaiorValor(int primeiroValor, int segundoValor)
+long long obterMaiorValor(long long primeiroValor, long long segundoValor)
 {
     if (primeiroValor > segundoValor)
     {
@@ -17,14 +17,19 @@ int obterMaiorValor(int primeiroValor, int segundoValor)
 }
 
 // Função para calcular a pontuação máxima usando programação dinâmica
-long long calcularPontuacaoMaximaDinamica(int *frequencia, int tamanhoMaximo)
-{
+long long calcularPontuacaoMaximaDinamica(int *frequencia, int tamanhoMaximo) {
+    if (tamanhoMaximo == 0) {
+        return 0;
+    }
+
     long long tabelaDePontuacoes[TAMANHO_MAXIMO] = {0};
 
-    tabelaDePontuacoes[1] = frequencia[1];
+    tabelaDePontuacoes[0] = frequencia[0];
+    if (tamanhoMaximo > 1) {
+        tabelaDePontuacoes[1] = obterMaiorValor(frequencia[0], frequencia[1] * 1LL);
+    }
 
-    for (int i = 2; i < tamanhoMaximo; i++)
-    {
+    for (int i = 2; i < tamanhoMaximo; i++) {
         long long excluirPontuacao = tabelaDePontuacoes[i - 1];
         long long incluirPontuacao = tabelaDePontuacoes[i - 2] + (long long)frequencia[i] * i;
         tabelaDePontuacoes[i] = obterMaiorValor(excluirPontuacao, incluirPontuacao);
@@ -34,14 +39,17 @@ long long calcularPontuacaoMaximaDinamica(int *frequencia, int tamanhoMaximo)
 }
 
 // Função para calcular a frequência dos números na sequência
-void calcularFrequencia(int quantidadeDeElementos, int *sequencia, int *frequencia)
-{
-    for (int i = 0; i < quantidadeDeElementos; i++)
-    {
+void calcularFrequencia(int quantidadeDeElementos, int *sequencia, int *frequencia) {
+    for (int i = 0; i < quantidadeDeElementos; i++) {
         int numero = sequencia[i];
         frequencia[numero]++;
     }
 }
+
+
+
+
+
 
 //Busca exaustiva
 
@@ -57,6 +65,8 @@ int podeEscolher(int indice, int selecao, int tamanho)
     }
     return 1;
 }
+
+
 // Função para calcular a pontuação máxima usando busca exaustiva
 
 long long calcularPontuacaoMaximaForcaBruta(int sequencia[], int tamanho)
