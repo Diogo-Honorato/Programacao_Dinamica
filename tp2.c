@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TAMANHO_MAXIMO 100005
+#define TAMANHO_MAXIMO 100000
 
 // Função que retorna o máximo entre dois inteiros
 int obterMaiorValor(int primeiroValor, int segundoValor)
@@ -33,61 +33,78 @@ long long calcularPontuacaoMaximaDinamica(int *frequencia, int tamanhoMaximo)
     return tabelaDePontuacoes[tamanhoMaximo - 1];
 }
 
-// Função para calcular a pontuação máxima usando busca exaustiva
-long long calcularPontuacaoMaximaExaustiva(int *sequencia, int tamanho)
+// Função para calcular a frequência dos números na sequência
+void calcularFrequencia(int quantidadeDeElementos, int *sequencia, int *frequencia)
 {
-    if (tamanho == 0)
+    for (int i = 0; i < quantidadeDeElementos; i++)
     {
-        return 0;
+        int numero = sequencia[i];
+        frequencia[numero]++;
+    }
+}
+
+//Busca exaustiva
+
+int podeEscolher(int indice, int selecao, int tamanho)
+{
+    if (indice > 0 && (selecao & (1 << (indice - 1))))
+    {
+        return 0; // Verifica o elemento anterior
+    }
+    if (indice < tamanho - 1 && (selecao & (1 << (indice + 1))))
+    {
+        return 0; // Verifica o próximo elemento
+    }
+    return 1;
+}
+// Função para calcular a pontuação máxima usando busca exaustiva
+
+long long calcularPontuacaoMaximaForcaBruta(int sequencia[], int tamanho)
+{
+    long long maximoPontos = 0;
+
+    // Gera todos os subconjuntos possíveis da sequência
+    for (int selecao = 0; selecao < (1 << tamanho); selecao++)
+    {
+        long long somaAtual = 0;
+        int valido = 1;
+
+        for (int i = 0; i < tamanho; i++)
+        {
+            if (selecao & (1 << i))
+            {
+                // Verifica se podemos escolher o elemento sequencia[i]
+                if (!podeEscolher(i, selecao, tamanho))
+                {
+                    valido = 0;
+                    break;
+                }
+                somaAtual += sequencia[i];
+            }
+        }
+
+        // Se o subconjunto é válido, atualiza a pontuação máxima
+        if (valido)
+        {
+            maximoPontos = obterMaiorValor(maximoPontos, somaAtual);
+        }
     }
 
-    // Variável para armazenar a pontuação máxima encontrada
-    long long maximoPontuacao = 0;
+    return maximoPontos;
+}
 
-    // Percorrer todas as possíveis escolhas de elementos para remoção
+// Função para inicializar um array de inteiros com zeros
+void inicializarArrayComZeros(int tamanho, int *array)
+{
     for (int i = 0; i < tamanho; i++)
     {
-        // Calculando a pontuação para a jogada atual
-        long long pontosJogadaAtual = (long long)sequencia[i] * i;
-
-        // Calculando o tamanho da nova sequência
-        int tamanhoNovaSequencia = tamanho - 3;
-        if (tamanhoNovaSequencia <= 0)
-        {
-            continue; // Ignora esta iteração se não houver elementos suficientes para formar uma nova sequência
-        }
-
-        // Criando uma nova sequência sem o elemento atual e seus vizinhos
-        int *novaSequencia = (int *)malloc(tamanhoNovaSequencia * sizeof(int));
-        if (novaSequencia == NULL)
-        {
-            printf("\n\033[0;31mErro ao alocar memória para nova sequência.\033[0m\n\n");
-            exit(1);
-        }
-
-        int indiceNovaSequencia = 0;
-
-        for (int j = 0; j < tamanho; j++)
-        {
-            if (j == i || j == i + 1 || j == i - 1)
-            {
-                continue;
-            }
-            novaSequencia[indiceNovaSequencia++] = sequencia[j];
-        }
-
-        // Chamada recursiva para calcular a pontuação máxima para a nova sequência
-        long long pontuacaoRestante = calcularPontuacaoMaximaExaustiva(novaSequencia, tamanhoNovaSequencia);
-
-        // Atualizar a pontuação máxima encontrada até agora
-        maximoPontuacao = obterMaiorValor(maximoPontuacao, pontosJogadaAtual + pontuacaoRestante);
-
-        // Liberar memória alocada dinamicamente
-        free(novaSequencia);
+        array[i] = 0;
     }
-
-    return maximoPontuacao;
 }
+
+
+//Arquivos
+
 
 // Função para ler um inteiro da entrada
 int lerInteiro(FILE *file)
@@ -119,29 +136,11 @@ int *lerArquivo(const char *caminhoArquivo, int *quantidadeDeElementos)
     return sequencia;
 }
 
-// Função para inicializar um array de inteiros com zeros
-void inicializarArrayComZeros(int tamanho, int *array)
-{
-    for (int i = 0; i < tamanho; i++)
-    {
-        array[i] = 0;
-    }
-}
-
-// Função para calcular a frequência dos números na sequência
-void calcularFrequencia(int quantidadeDeElementos, int *sequencia, int *frequencia)
-{
-    for (int i = 0; i < quantidadeDeElementos; i++)
-    {
-        int numero = sequencia[i];
-        frequencia[numero]++;
-    }
-}
 
 // Função para escrever um inteiro em um arquivo de saída
 int escreverArquivo(const char *caminhoArquivoSaida, long long resultado)
 {
-    FILE *fileOut = fopen(caminhoArquivoSaida, "a");
+    FILE *fileOut = fopen(caminhoArquivoSaida, "w");
     if (fileOut == NULL)
     {
         printf("\n\033[0;31mErro ao abrir o arquivo de saída: %s\033[0m\n\n", caminhoArquivoSaida);
@@ -179,7 +178,7 @@ int main(int argc, char *argv[])
 
     if (argv[1][0] == 'A')
     {
-        pontuacaoMaxima = calcularPontuacaoMaximaExaustiva(sequencia, quantidadeDeElementos);
+        pontuacaoMaxima = calcularPontuacaoMaximaForcaBruta(sequencia, quantidadeDeElementos);
     }
     else if (argv[1][0] == 'D')
     {
@@ -193,6 +192,8 @@ int main(int argc, char *argv[])
     }
 
     escreverArquivo(caminhoArquivoSaida, pontuacaoMaxima);
+
+    printf("\n\n%lld\n\n",pontuacaoMaxima);
 
     free(sequencia);
 
