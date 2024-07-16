@@ -71,9 +71,6 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    
-
-
     int *array;
 
     char* arquivoEntrada = argv[2];
