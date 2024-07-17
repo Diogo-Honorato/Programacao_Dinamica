@@ -25,7 +25,7 @@ void gerarArquivoEntrada(const char *nomeArquivo, int N, int minVal, int maxVal)
 int main() {
     int N;
     int minVal = 0;
-    int maxVal = 100;
+    int maxVal = 100000;
 
     printf("Digite o número de elementos: ");
     scanf("%d", &N);
