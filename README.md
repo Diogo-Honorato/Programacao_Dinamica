@@ -1,4 +1,4 @@
-#INTRODUÇÃO
+#INTRODUÇÃO#
 
 João não gosta de sentir tédio. É por isso que sempre que fica entediado, ele inventa jogos. Em
 uma longa noite de inverno, ele inventou um jogo e decidiu jogá-lo.
