@@ -19,6 +19,7 @@ sequência de Joâo.
 A segunda linha contém N inteiros a1, a2, ..., an.
 
 Exemplo de entrada:
+
 9
 
 1 2 1 3 2 2 2 2 3
