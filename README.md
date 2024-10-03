@@ -1,4 +1,5 @@
 Introdução
+
 João não gosta de sentir tédio. É por isso que sempre que fica entediado, ele inventa jogos. Em
 uma longa noite de inverno, ele inventou um jogo e decidiu jogá-lo.
 Dada uma sequência a composta por n inteiros. O jogador pode fazer várias jogadas. Em cada
@@ -16,11 +17,13 @@ A primeira linha contém o inteiro N (0 ≤ N ≤ 105
 ) que mostra quantos números existem na
 sequência de Joâo.
 A segunda linha contém N inteiros a1, a2, ..., an.
+
 Exemplo de entrada:
 9
 1 2 1 3 2 2 2 2 3
 Exemplo de saída
 10
+
 O atende por tp2 e será chamado da seguinte forma:
 ./tp2 <estrategia> entrada.txt Onde:
 • <estrategia> é D para a solução baseada em programação dinâmica e A para a solução
