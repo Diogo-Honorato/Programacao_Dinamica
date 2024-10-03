@@ -29,6 +29,7 @@ Exemplo de saída
 10
 
 O executável atende por tp2 e será chamado da seguinte forma:
+
 ./tp2 <estrategia> entrada.txt Onde:
 
 • <estrategia> é D para a solução baseada em programação dinâmica e A para a solução
