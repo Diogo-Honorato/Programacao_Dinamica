@@ -1,4 +1,4 @@
-Introdução
+#INTRODUÇÃO
 
 João não gosta de sentir tédio. É por isso que sempre que fica entediado, ele inventa jogos. Em
 uma longa noite de inverno, ele inventou um jogo e decidiu jogá-lo.
@@ -20,12 +20,16 @@ A segunda linha contém N inteiros a1, a2, ..., an.
 
 Exemplo de entrada:
 9
+
 1 2 1 3 2 2 2 2 3
+
 Exemplo de saída
+
 10
 
 O atende por tp2 e será chamado da seguinte forma:
 ./tp2 <estrategia> entrada.txt Onde:
+
 • <estrategia> é D para a solução baseada em programação dinâmica e A para a solução
 alternetiva;
 
